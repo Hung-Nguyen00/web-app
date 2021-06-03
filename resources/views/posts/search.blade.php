@@ -2,18 +2,16 @@
 
 @section('content')
     <div class="container">
-
         <div class="justify-content-center">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="pt-1">Category - {{ $category->name }}</h5>
+                <h5 class="pt-1">Posts</h5>
                 <form action="{{ route('posts.search')}}">
                     @csrf
                     <input class="border-info "  name="search_post" placeholder="Search user" style="padding: 6px; border-radius: 5px;" type="text">
                     <input class="btn btn-info" type="submit" value="Search">
                 </form>
             </div>
-            <div class="col-12 card-body d-flex justify-content-center flex-wrap">
-                @if($posts->count() >0 )
+            <div class="col-12 card-body d-flex flex-wrap">
                 <div class="row">
                     @foreach($posts as $post)
                         <div class=" col-4 mb-2" style="">
@@ -31,9 +29,6 @@
                         </div>
                     @endforeach
                 </div>
-                @else
-                <h5 class="text-center">There are any post here</h5>
-                @endif
             </div>
         </div>
     </div>

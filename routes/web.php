@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use  App\Http\Controllers\auth\LoginController;
+use App\Http\Controllers\auth\RegisterController;
+use App\Http\Controllers\auth\LogoutController;
+use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,36 +17,51 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('posts.index');
 });
+
+
 Route::get('/logout', 'LoginController@logout')->name('logout');
 
 Route::get('/read/{id}', 'PostUserController@store')->name('read');
 
-Route::get('/home', 'HomeController@index')->name('home');
-
 Auth::routes();
+//voucher
+Route::resource('vouchers', 'VoucherController')->only([
+    'store'
+]);
 
+// post
+Route::resource('posts', 'PostController')->except([
+    'show', 'index'
+]);
+Route::get('/latestPost', 'PostUserController@index')->name('posts.latest');
+// category
+// User
+Route::get('posts/search', 'PostController@search')->name('posts.search');
 
-Route::group(['middleware' => ['auth']], function (){
-    Route::get('/send-email', 'EmailController@index')->name('email.index');
+Route::get('/users/{id}', 'PostUserController@show')->name('user.ownPosts');
+Route::get('/users/{id}', 'PostUserController@show')->name('user.ownPosts');
+Route::get('/users/{user}/vouchers', 'UserController@showVouchers')->name('user.ownVouchers');
+Route::delete('/users/{id}', 'PostUserController@destroy')->name('user.destroy');
+// admin
+Route::group(['middleware' => ['admin']], function (){
 
-    // post
-    Route::resource('posts', 'PostController')->except([
-       'show', 'index'
-    ]);
-    Route::get('/latestPost', 'PostUserController@index')->name('posts.latest');
-    // category
-    Route::resource('category', 'CategoryController')->except([
-        'show',
-    ]);
-    // User
-    Route::get('/users/{id}', 'PostUserController@show')->name('user.ownPosts');
-    Route::get('/users/{id}', 'PostUserController@show')->name('user.ownPosts');
-    Route::delete('/users/{id}', 'PostUserController@destroy')->name('user.destroy');
-    // admin
-    Route::group(['middleware' => ['admin']], function (){
-        Route::get('/users', 'UserController@index')->name('user.index');
+    Route::prefix('Admin')->group(function () {
+        Route::get('', function (){
+            return view('admin.layout.app');
+        })->name('admin.index');
+        Route::resource('category', 'CategoryController')->except([
+            'show',
+        ]);
+        Route::resource('vouchers', 'VoucherController')->except([
+            'store'
+        ]);
+
+        Route::get('/users', 'UserController@index')->name('users.index');
+        Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
+        Route::put('/users/{user}', 'UserController@edit')->name('users.update');
+
     });
 
 });

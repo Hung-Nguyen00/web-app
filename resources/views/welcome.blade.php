@@ -7,89 +7,61 @@
         <title>Laravel</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
-
-        <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
-        <script src="{{ asset('/js/app.js') }}"></script>
-        <script src="{{ asset('/js/bootstrap.js') }}"></script>
+        <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
         <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Nunito', sans-serif;
-                font-weight: 200;
-                height: 100vh;
-                margin: 0;
-            }
-            ul{
-                list-style-type: none;
-            }
-            ul li{
-                margin-right: 10px;
-                padding: 20px 20px;
-            }
-            .full-height {
-                height: 100vh;
-            }
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 13px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
     </head>
-    <body>
-        <div class="flex-center position-ref full-height">
+    <body class="bg-light">
             @if (Route::has('login'))
-                <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Home</a>
+                        <div class="flex-center col-10 bg-primary float-right align-items-center" style="z-index:2; height: 50px;">
+                            <div class="links" style="position: absolute; right: 10px;">
+                        <span class="font-weight-bold">Hello <span class="text-light ml-1">{{Auth::user()->name}}</span> </span>
+                            <form action="{{route('logout')}}" method="post" class="d-inline p-3">
+                                @csrf
+                                <button class="border-0 btn btn-light" type="submit">Log out</button>
+                            </form>
+                            </div>
+                        </div>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
+                        <div class="flex-center col-10 float-right align-items-center" style="z-index:2; height: 50px;">
+                            <div class="links" style="position: absolute; right: 10px;">
+                                <a href="{{ route('login') }}">Login</a>
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}">Register</a>
+                                @endif
+                            </div>
+                        </div>
                     @endauth
-                </div>
+
             @endif
-            <div class="content">
-                @yield('content')
+        @auth
+        <div class="col-2 float-left p-0" style="position: absolute; top: 0;">
+            <div class="col-2 bg-info position-fixed full-height">
+                <h3 class="pt-2 text-center text-white">John's Shop</h3>
+                <nav class="nav flex-column mt-3" >
+                    <a class="nav-link active" aria-current="page" href="{{route('products.index')}}">Product</a>
+                    <a class="nav-link active" aria-current="page" href="{{route('orders.index')}}">Order</a>
+                    <a class="nav-link" href="#">Account</a>
+                </nav>
             </div>
         </div>
+
+        @endauth
+            <main class="page-content ">
+                @yield('content')
+            </main>
+            <script>
+                var success = document.querySelector('.alert-success');
+                 window.onload = function () {
+                     if (success!= null)
+                     {
+                         alert(success.innerHTML);
+                     }
+                 }
+            </script>
     </body>
 </html>

@@ -44,14 +44,20 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
 
-                        @if(auth()->user() && auth()->user()->roles->pluck('name')->contains('admin'))
+                        @if(auth()->user() && auth()->user()->role->name === 'admin')
                         <li class="btn btn-info d-flex align-items-center mr-2" style="font-size: 13px;">
-                            <a class="text-light text-decoration-none" href="{{ route('category.create') }}">Create Category</a>
+                            <a class="text-light text-decoration-none" href="{{ route('admin.index') }}">App Manager</a>
                         </li>
                         @endif
                         @auth
                             <li class="btn btn-info d-flex align-items-center mr-2" style="font-size: 13px;">
                                 <a class="text-light text-decoration-none" href="{{ route('posts.create') }}">Add Post</a>
+                            </li>
+                            <li class="btn btn-info mr-1">
+                                <a class="text-decoration-none text-light" href="{{ route('user.ownPosts', auth()->id()) }}"> My posts </a>
+                            </li>
+                            <li class="btn btn-info mr-1">
+                                <a class="text-decoration-none text-light" href="{{ route('user.ownVouchers', auth()->user()) }}"> My vouchers </a>
                             </li>
                             @include('posts.countLatestPost')
                         @endauth
@@ -87,10 +93,23 @@
                 </div>
             </div>
         </nav>
-
         <main class="py-4">
             @yield('content')
         </main>
+        @if(session('success'))
+            <div class="alert-success d-none">
+                {{session('success')}}
+            </div>
+        @endif
     </div>
+    <script>
+        var success = document.querySelector('.alert-success');
+        window.onload = function () {
+            if (success!= null)
+            {
+                alert(success.innerHTML);
+            }
+        }
+    </script>
 </body>
 </html>

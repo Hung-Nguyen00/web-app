@@ -56,7 +56,7 @@ class CategoryController extends Controller
             $node = Category::find($request->parent);
             $node->appendNode($category);
         }
-        return redirect()->back();
+        return redirect()->back()->with('success', 'A category was created successfully');
     }
 
     /**

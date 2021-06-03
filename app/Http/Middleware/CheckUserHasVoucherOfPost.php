@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Voucher;
 use Closure;
-use Illuminate\Support\Facades\Auth;
-class checkAdmin
+
+class CheckUserHasVoucherOfPost
 {
     /**
      * Handle an incoming request.
@@ -15,12 +16,10 @@ class checkAdmin
      */
     public function handle($request, Closure $next)
     {
-
-        $userRoles = auth()->user()->role->pluck('name');
-
-        if(!$userRoles->contains('admin'))
+        $voucher = Voucher::where('user_id', auth()->id())->where('post_id', $request->post_id);
+        if ($voucher->count() > 0)
         {
-            return redirect()->route('posts.index');
+            return response()->json(['message' => 'Has some error'], 500);
         }
         return $next($request);
     }

@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
         'last_login_at',
         'last_login_ip'
 
@@ -47,8 +48,8 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'user_id');
     }
 
-    public  function roles(){
-        return $this->belongsToMany(Role::class);
+    public  function role(){
+        return $this->belongsTo(Role::class);
     }
 
     public  function isOnline(){
@@ -56,6 +57,10 @@ class User extends Authenticatable
     }
 
 
+    public function getVouchers(){
+        return $this->belongsToMany(Post::class, 'vouchers',
+            'user_id','post_id')->withTimestamps();
+    }
 
     public  function readPosts(){
         return $this->belongsToMany(Post::class, 'post_user', 'user_id', 'post_id');

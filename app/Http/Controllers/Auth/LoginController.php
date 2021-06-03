@@ -50,7 +50,7 @@ class LoginController extends Controller
      public  function logout(Request $request)
      {
          auth()->user()->update([
-             'last_login_at' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTime(),
+               'last_login_at' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTime(),
              'last_login_ip' => $request->getClientIp()
          ]);
 

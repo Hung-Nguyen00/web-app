@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
@@ -9,6 +10,7 @@ class Post extends Model
 
     protected $fillable = [
         'user_id',
+        'title',
         'caption',
         'image',
         'category_id'
@@ -28,4 +30,18 @@ class Post extends Model
     public function readBy(){
         return $this->belongsToMany(User::class, 'post_user', 'post_id', 'user_id');
     }
+    public function hasVouchers(){
+        return $this->belongsToMany(Post::class,
+            'vouchers',
+            'post_id',
+            'user_id')->withTimestamps();
+    }
+
+    public function existVoucher($id){
+        return  Post::where('id', [$id])
+            ->where('voucher_enable', '>', Carbon::now())
+            ->where('voucher_quantity', '>', 0)
+            ->get();
+    }
+
 }

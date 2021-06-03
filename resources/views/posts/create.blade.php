@@ -10,6 +10,17 @@
                         <form method="post" enctype="multipart/form-data" action="{{ route('posts.store') }}">
                             @csrf
                             <div class="form-group row">
+                                <label for="name" class="col-md-4 col-form-label">Title</label>
+                                <div class="col-md-6">
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="title" value="{{ old('title')}}" >
+                                    @if($errors->has('title'))
+                                        <div class="text-danger font-weight-bold mt-2 text-sm-left">
+                                            {{ $errors->first('title') }}
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="name" class="col-md-4 col-form-label">Caption</label>
 
                                 <div class="col-md-6">
@@ -21,6 +32,7 @@
                                     @endif
                                 </div>
                             </div>
+
                             <div class="form-group row">
                                 <label for="image" class="col-md-4 col-form-label">Image</label>
                                 <div class="col-md-6">

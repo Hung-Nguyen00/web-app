@@ -29,7 +29,7 @@
                                 <td> {{ ++$i}}</td>
                                 <td>{{ $voucher->voucher_code }}</td>
                                 <td class="text-center">
-                                    {{ $voucher->created_at}}
+                                    {{ Carbon\Carbon::parse($voucher->created_at)->format('d-m-Y\ | H:i')}}
                                 </td>
                                 <td>
                                     @foreach($users as $user)

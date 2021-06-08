@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\HasSomeOneReadPostEvent;
+use App\Mail\HasSomeoneReadPost;
+use App\Notifications\NotifyHasUserReadPost;
 use App\Post;
 use App\PostUser;
 use App\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\Global_;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class PostUserController extends Controller
 {
@@ -19,7 +20,9 @@ class PostUserController extends Controller
             return redirect()->route('posts.show', $id);
         }
         else{
-            $user->readPosts()->attach($id);
+            $getPost = Post::where('id', $id)->pluck('user_id');
+            $user_post = User::whereId($getPost)->first();
+            event(new HasSomeOneReadPostEvent($user_post, $user, $id));
             return redirect()->route('posts.show', $id);
         }
     }
@@ -29,7 +32,7 @@ class PostUserController extends Controller
         $posts = Post::whereDoesntHave('readBy', function ($q){
             $q->where('user_id', auth()->id());
         })->whereNotIn('user_id', [auth()->id()])
-            ->get();
+            ->paginate(10);
         return view('posts.latest', compact('posts'));
     }
 

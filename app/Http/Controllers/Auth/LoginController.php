@@ -53,8 +53,7 @@ class LoginController extends Controller
                'last_login_at' => Carbon::now('Asia/Ho_Chi_Minh')->toDateTime(),
              'last_login_ip' => $request->getClientIp()
          ]);
-
          auth()->logout();
-         return view('auth.login');
+         return redirect()->route('login');
      }
 }

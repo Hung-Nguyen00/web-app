@@ -4,7 +4,20 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="card-header">Users manager</div>
+                <div class="card-header">
+                    <h5>User's manager</h5>
+                    <div>
+                        <form action=" {{ route('users.import') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <input type="file" name="file" class="form-control">
+                            <button type="submit">Import User data</button>
+                            @if($errors->has('file'))
+                                <p class="text-danger"> {{ $errors->first('file')}}</p>
+                                @endif
+                            <a href="{{ route('users.export') }}" class="btn btn-info">Export User Data</a>
+                        </form>
+                    </div>
+                </div>
                 <table class="table">
                     <thead>
                     <tr>
@@ -25,7 +38,7 @@
                             <tr>
                                 <td> {{ ++$i}}</td>
                                 <td>{{$user->email}}</td>
-                                <td>{{$user->name  }}</td>
+                                <td>{{$user->name }}</td>
                                 <td></td>
                                 <td> Online <span class="text-success font-weight-bold">*</span> </td>
                                 <td>
@@ -36,7 +49,7 @@
                         @else
                             <tr>
                                 <td> {{ ++$i}}</td>
-                                <td>{{$user->email}}</td>
+                                <td>{{$user->email }}</td>
                                 <td>{{$user->name  }}</td>
                                 <td></td>
                                 <td>Offline <span class="text-dark font-weight-bold">*</span> </td>

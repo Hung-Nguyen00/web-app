@@ -12,6 +12,7 @@ use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
+    protected $module = 'posts';
     /**
      * Display a listing of the resource.
      *
@@ -90,37 +91,46 @@ class PostController extends Controller
         $post = Post::where('id',$id)->first();
         $user = User::where('id',auth()->id())->first();
         // check user has voucher ?
-        $vouchers = Voucher::where('user_id', $user->id)->where('post_id', $id);
+        if(\auth()->user())
+        {
+            $vouchers = Voucher::where('user_id', $user->id)->where('post_id', $id);
+            $existVoucher = (new Post())->existVoucher([$post->id]);
 
-        // check Voucher with voucher_enable and voucher_quantity field
-        $existVoucher = (new Post())->existVoucher([$post->id]);
-
-        // if existVoucher is still enable.
-        if($existVoucher->count() > 0){
-            //if user has voucher, then return voucher_code has been in db
-            if($vouchers->count() > 0){
-                $voucher_code = $vouchers->first()->voucher_code;
-                return view('posts.detail')
-                    ->with([
-                        'voucher' => $voucher_code,
-                        'post' => $post,
-                    ]);
+            // if existVoucher is still enable.
+            if($existVoucher->count() > 0){
+                //if user has voucher, then return voucher_code has been in db
+                if($vouchers->count() > 0){
+                    $voucher_code = $vouchers->first()->voucher_code;
+                    return view('posts.detail')
+                        ->with([
+                            'voucher' => $voucher_code,
+                            'post' => $post,
+                        ]);
+                }else{
+                    // else User get voucher
+                    return view('posts.detail')
+                        ->with([
+                            'voucher' => null,
+                            'post' => $post,
+                        ]);
+                }
             }else{
-                // else User get voucher
+                // if voucher is unable will return message.
                 return view('posts.detail')
                     ->with([
-                        'voucher' => null,
+                        'voucher' => 'There is no more available voucher.',
                         'post' => $post,
                     ]);
             }
-        }else{
-            // if voucher is unable will return message.
+        }else
+        {
+            dd($post);
             return view('posts.detail')
                 ->with([
-                    'voucher' => 'There is no more available voucher.',
                     'post' => $post,
                 ]);
         }
+        // check Voucher with voucher_enable and voucher_quantity field
 
     }
 
@@ -159,8 +169,7 @@ class PostController extends Controller
     }
 
     public function search(Request $request){
-
-        $posts = Post::where('title', 'LIKE', '%'.$request->search_post. '%')->get();
+        $posts = Post::where('title', 'LIKE', '%'.$request->search_post.'%')->get();
         return view('posts.search', compact('posts'));
     }
 }

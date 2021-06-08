@@ -84,9 +84,13 @@
             </h3>
             <div class="border-bottom pt-1" style="width: 100%"></div>
             <nav class="menu-main nav flex-column mt-3">
-                <a class="nav-link active" aria-current="page" href="{{ route('vouchers.index') }}">Post</a>
-                <a class="nav-link active" aria-current="page" href="{{ route('category.create') }}">Category</a>
-                <a class="nav-link" href="{{ route('users.index')}}">Account</a>
+                @if(auth()->user()->role->name === 'user')
+                    <a class="nav-link active" aria-current="page" href="{{ route('vouchers.index') }}">Post</a>
+                    @else
+                    <a class="nav-link active" aria-current="page" href="{{ route('vouchers.index') }}">Post</a>
+                    <a class="nav-link active" aria-current="page" href="{{ route('category.create') }}">Category</a>
+                    <a class="nav-link" href="{{ route('users.index')}}">Account</a>
+                @endif
             </nav>
         </div>
     </div>

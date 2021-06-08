@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Base;
 
 
 class BaseController extends Controller
@@ -16,6 +16,7 @@ class BaseController extends Controller
             $this->middleware("scope:$this->module.remove_able")->only(['destroy']);
             $this->middleware("scope:$this->module.approve_able")->only(['approve']);
             $this->middleware("scope:$this->module.cancel_able")->only(['cancel']);
+            $this->middleware("scope:$this->module.export_able")->only(['export', 'import']);
         }
     }
 }

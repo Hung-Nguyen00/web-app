@@ -44,7 +44,7 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
 
-                        @if(auth()->user() && auth()->user()->role->name === 'admin')
+                        @if(auth()->user())
                         <li class="btn btn-info d-flex align-items-center mr-2" style="font-size: 13px;">
                             <a class="text-light text-decoration-none" href="{{ route('admin.index') }}">App Manager</a>
                         </li>

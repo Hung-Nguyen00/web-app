@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Notifications\NotifyMissPostUser;
 use App\Post;
 use App\PostUser;
+use App\Role;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -49,7 +50,9 @@ class miss_posts_users extends Command
             $postUsers = PostUser::whereUserId($user)->pluck('post_id');
             $posts = Post::whereNotIn('id', $postUsers)->pluck('id');
             if($posts->count() > 0){
-                $notfiUser = User::find($user);
+                $role = Role::where('name', 'admin')->first();
+
+                $notfiUser = User::find($role->id);
                 $notfiUser->Notify( new NotifyMissPostUser());
             }
         }

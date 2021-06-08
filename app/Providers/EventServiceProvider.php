@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\HasSomeOneReadPostEvent;
+use App\Listeners\SendEmailToUserListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +19,11 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        HasSomeOneReadPostEvent::class =>[
+            \App\Listeners\AddUserReadPostToDatabaseListener::class,
+            \App\Listeners\SendEmailToUserListener::class,
+
         ],
     ];
 

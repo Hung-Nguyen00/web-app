@@ -10,20 +10,22 @@
                     </div>
                     <div class="col-12">
                         <h5 class="text-info pt-2">
-                            @if($post->ownPost() == false)
-                                @if($voucher != null)
-                                    <h5 class="">Your voucher code:
-                                        <span class="font-weight-bold text-success">{{ $voucher }}</span>
-                                    </h5>
-                                @else
-                                    <form action="{{ route('vouchers.store')}}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="post_id" value="{{ $post->id }}">
-                                        <button class="btn btn-info" type="submit">Get voucher</button>
-                                    </form>
-                                @endif
-                            @endif
                             <a href="{{ route('user.ownPosts', $post->user->id) }}"> {{ $post->user->name }}</a>
+                        @auth
+                                @if($post->ownPost() == false)
+                                    @if($voucher != null)
+                                        <h6 class="">Voucher code:
+                                            <span class="font-weight-bold text-danger">{{ $voucher }}</span>
+                                        </h6>
+                                    @else
+                                        <form action="{{ route('vouchers.store')}}" method="post">
+                                            @csrf
+                                            <input type="hidden" name="post_id" value="{{ $post->id }}">
+                                            <button class="btn btn-info" type="submit">Get voucher</button>
+                                        </form>
+                                    @endif
+                                @endif
+                            @endauth
                         </h5>
                         <p>{{ $post->caption }}</p>
                     </div>

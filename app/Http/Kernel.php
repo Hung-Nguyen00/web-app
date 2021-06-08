@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Http\Middleware\checkAdmin;
+use App\Http\Middleware\CheckForAnyScope;
+use App\Http\Middleware\CheckPermission;
 use App\Http\Middleware\CheckUserHasVoucherOfPost;
 use App\Http\Middleware\LastUserActivity;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -69,5 +71,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'admin' => checkAdmin::class,
         'CheckUserHasVoucher' => CheckUserHasVoucherOfPost::class,
+        'CheckPermission' => CheckPermission::class,
+        'CheckForAnyScope' => CheckForAnyScope::class,
+        'scope' => CheckForAnyScope::class,
     ];
 }

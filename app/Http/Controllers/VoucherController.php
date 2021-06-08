@@ -12,10 +12,6 @@ use Intervention\Image\Facades\Image;
 
 class VoucherController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('CheckUserHasVoucher');
-    }
 
     public function index()
     {
@@ -96,16 +92,6 @@ class VoucherController extends Controller
             'voucher_quantity' => 'required|min:0|numeric',
             'voucher_enable' => 'required|date|after:today',
         ]);
-//
-//        if($request->image) {
-//            $imagePath = $request->image->store('uploads', 'public');
-//
-//            // Intervention\Image\Facades\Image;
-//            // save to storage
-//            $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
-//            $image->save();
-//            // auth before save request->all to database.
-//        }
         $voucher->title = $request->title;
         $voucher->voucher_quantity = $request->voucher_quantity;
         $voucher->voucher_enable = $request->voucher_enable;

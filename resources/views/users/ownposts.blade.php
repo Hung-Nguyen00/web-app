@@ -10,7 +10,7 @@
                         <strong> {{ $posts->count()}} {{ Str::plural('post', $posts->count()) }}</strong>
                     </div>
                 </div>
-                <div class="col-12 d-flex">
+                <div class="col-12 d-flex flex-wrap">
                 @foreach($posts as $post)
                     <div class=" col-4 mb-2" style="">
                         <div class="col-12 pb-3 bg-white border-0 mt-2" style="border-radius: 5px">

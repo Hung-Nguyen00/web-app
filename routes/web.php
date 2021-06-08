@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use  App\Http\Controllers\auth\LoginController;
-use App\Http\Controllers\auth\RegisterController;
-use App\Http\Controllers\auth\LogoutController;
+use  App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\ProductController;
 /*
 |--------------------------------------------------------------------------
@@ -19,56 +19,47 @@ use App\Http\Controllers\ProductController;
 Route::get('/', function () {
     return redirect()->route('posts.index');
 });
+Auth::routes();
 
-
-Route::get('/logout', 'LoginController@logout')->name('logout');
-
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/read/{id}', 'PostUserController@store')->name('read');
 
-Auth::routes();
-//voucher
-Route::resource('vouchers', 'VoucherController')->only([
-    'store'
-]);
-
 // post
-Route::resource('posts', 'PostController')->except([
-    'show', 'index'
-]);
+Route::resource('posts', 'PostController');
 Route::get('/latestPost', 'PostUserController@index')->name('posts.latest');
-// category
+Route::get('/search/', 'PostController@search')->name('posts.search');
+
+//category
+Route::resource('category', 'CategoryController')->only([
+    'show'
+    ]
+);
+
 // User
-Route::get('posts/search', 'PostController@search')->name('posts.search');
-
-Route::get('/users/{id}', 'PostUserController@show')->name('user.ownPosts');
-Route::get('/users/{id}', 'PostUserController@show')->name('user.ownPosts');
-Route::get('/users/{user}/vouchers', 'UserController@showVouchers')->name('user.ownVouchers');
-Route::delete('/users/{id}', 'PostUserController@destroy')->name('user.destroy');
+Route::get('/user/{id}', 'PostUserController@show')->name('user.ownPosts');
+Route::get('/user/{id}', 'PostUserController@show')->name('user.ownPosts');
+Route::get('/user/{user}/vouchers', 'UserController@showVouchers')->name('user.ownVouchers');
+Route::delete('/user/{id}', 'PostUserController@destroy')->name('user.destroy');
 // admin
-Route::group(['middleware' => ['admin']], function (){
-
-    Route::prefix('Admin')->group(function () {
-        Route::get('', function (){
+Route::group(['prefix' => 'Admin','middleware' => ['CheckPermission']], function (){
+        Route::get('', function ()
+        {
             return view('admin.layout.app');
         })->name('admin.index');
-        Route::resource('category', 'CategoryController')->except([
-            'show',
+        Route::resources([
+            'vouchers' => 'Base\VoucherController',
+            'users'    => 'Base\UserController'
         ]);
-        Route::resource('vouchers', 'VoucherController')->except([
-            'store'
+        Route::get('/export', 'Base\UserController@export')->name('users.export');
+        Route::post('/export', 'Base\UserController@import')->name('users.import');
+
+        Route::resource('posts', 'Base\PostController')->except([
+            'show', 'index'
         ]);
-
-        Route::get('/users', 'UserController@index')->name('users.index');
-        Route::get('/users/{user}/edit', 'UserController@edit')->name('users.edit');
-        Route::put('/users/{user}', 'UserController@edit')->name('users.update');
-
-    });
-
+        Route::resource('category', 'Base\CategoryController')->except([
+           'show'
+        ]);
 });
-Route::resource('category', 'CategoryController')->only([
-    'show',
-]);
 
-Route::resource('posts', 'PostController')->only([
-    'show', 'index'
-]);
+
+

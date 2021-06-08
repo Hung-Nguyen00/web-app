@@ -39,7 +39,11 @@
                                        .'/'.$post->voucher_quantity }}
 
                                     @endif
-                                    <a href="{{ route('vouchers.show', $post) }}">View</a>
+                                    @if($post->voucher_quantity == 0 || $post->voucher_enable < \Carbon\Carbon::now())
+                                            <a class="text-danger" href="{{ route('vouchers.show', $post) }}">View</a>
+                                        @else
+                                            <a class="text-info" href="{{ route('vouchers.show', $post) }}">View</a>
+                                    @endif
                                 </td>
                                 <td>
                                     {{ Carbon\Carbon::parse($post->voucher_enable)->format('d-m-Y\ | H:i') }}

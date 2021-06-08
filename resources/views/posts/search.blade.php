@@ -6,9 +6,8 @@
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="pt-1">Posts</h5>
                 <form action="{{ route('posts.search')}}">
-                    @csrf
-                    <input class="border-info "  name="search_post" placeholder="Search user" style="padding: 6px; border-radius: 5px;" type="text">
-                    <input class="btn btn-info" type="submit" value="Search">
+                    <input class="border-info " name="search_post" placeholder="Search user" style="padding: 6px; border-radius: 5px;" type="text">
+                    <button class="btn btn-info" type="submit">Search</button>
                 </form>
             </div>
             <div class="col-12 card-body d-flex flex-wrap">

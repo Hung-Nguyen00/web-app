@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class PermissionRole extends Model
 {
     protected $table = 'permissions_roles';
-
+    public $timestamps = false;
     protected $fillable = [
       'role_id',
       'permission_id',
@@ -52,4 +52,5 @@ class PermissionRole extends Model
         }
         return $permissions;
     }
+
 }

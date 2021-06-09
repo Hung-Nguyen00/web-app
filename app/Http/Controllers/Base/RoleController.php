@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class RoleController extends BaseController
 {
+    protected $module = 'roles';
     /**
      * Display a listing of the resource.
      *
@@ -74,7 +75,7 @@ class RoleController extends BaseController
      */
     public function update(Request $request, Role $role)
     {
-        //
+
     }
 
     /**

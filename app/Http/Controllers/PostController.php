@@ -48,8 +48,8 @@ class PostController extends Controller
     {
         if(Auth::id())
         {
-        $this->validate($request, [
-            'caption' => ['required'],
+        $this->validate($request,  [
+            'caption' => ['required', 'max:50'],
             'title' => ['required'],
             'image' => ['required', 'image'],
             'category' => 'required'
@@ -169,7 +169,7 @@ class PostController extends Controller
     }
 
     public function search(Request $request){
-        $posts = Post::where('title', 'LIKE', '%'.$request->search_post.'%')->get();
+        $posts = Post::where('title', 'LIKE', '%'.$request->search_post.'%')->paginate(20);
         return view('posts.search', compact('posts'));
     }
 }

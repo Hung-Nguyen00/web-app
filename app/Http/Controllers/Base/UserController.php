@@ -59,4 +59,11 @@ class UserController extends BaseController
 
         return redirect()->back()->with('success', 'Updated successfully');
     }
+
+    public function update(Request $request, User $user){
+
+        $data = $request->except('_token','_method');
+        $user->update($data);
+        return redirect()->back()->with('success', 'updated successfully');
+    }
 }

@@ -48,7 +48,8 @@ Route::group(['prefix' => 'Admin','middleware' => ['CheckPermission']], function
         })->name('admin.index');
         Route::resources([
             'vouchers' => 'Base\VoucherController',
-            'users'    => 'Base\UserController'
+            'users'    => 'Base\UserController',
+            'roles'     => 'Base\RoleController',
         ]);
         Route::get('/export', 'Base\UserController@export')->name('users.export');
         Route::post('/export', 'Base\UserController@import')->name('users.import');
@@ -59,6 +60,7 @@ Route::group(['prefix' => 'Admin','middleware' => ['CheckPermission']], function
         Route::resource('category', 'Base\CategoryController')->except([
            'show'
         ]);
+        Route::resource('permissions', 'Base\PermissionRoleController');
 });
 
 

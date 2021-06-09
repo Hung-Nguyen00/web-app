@@ -90,6 +90,7 @@
                     <a class="nav-link active" aria-current="page" href="{{ route('vouchers.index') }}">Post</a>
                     <a class="nav-link active" aria-current="page" href="{{ route('category.create') }}">Category</a>
                     <a class="nav-link" href="{{ route('users.index')}}">Account</a>
+                    <a class="nav-link" href="{{ route('permissions.index')}}">Permission</a>
                 @endif
             </nav>
         </div>
@@ -100,13 +101,15 @@
 </main>
 </div>
 <script>
-    var success = document.querySelector('.alert-success');
+    const success = document.querySelector('.alert-success');
+
     window.onload = function () {
         if (success!= null)
         {
             alert(success.innerHTML);
         }
     }
+
 </script>
 </body>
 </html>

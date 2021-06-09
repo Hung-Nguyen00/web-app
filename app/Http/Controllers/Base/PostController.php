@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\Category;
+use App\Http\Requests\PostRequest;
 use App\Post;
 use App\User;
 use App\Voucher;
@@ -44,17 +45,10 @@ class PostController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
         if(Auth::id())
         {
-        $this->validate($request, [
-            'caption' => ['required'],
-            'title' => ['required'],
-            'image' => ['required', 'image'],
-            'category' => 'required'
-        ]);
-
         // save image to  storage/public/uploads.
         $imagePath = $request->image->store('uploads','public');
             // Intervention\Image\Facades\Image;
